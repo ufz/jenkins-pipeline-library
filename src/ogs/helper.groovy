@@ -1,21 +1,33 @@
 package ogs.helper;
 
-def isRelease () {
-    if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME.contains('release'))
+def isRelease(script) {
+    if (script == null)
+        return false;
+    if (script.env == null)
+        return false;
+    if (script.env.BRANCH_NAME == null)
+        return false;
+    if (script.env.BRANCH_NAME == 'master' || script.env.BRANCH_NAME.contains('release'))
         return true;
     return false;
 }
 
-def isOriginMaster() {
-    if (env.BRANCH_NAME == 'master' && env.JOB_URL.contains('ufz'))
+def isOriginMaster(script) {
+    if (script == null)
+        return false;
+    if (script.env == null)
+        return false;
+    if (script.env.BRANCH_NAME == null)
+        return false;
+    if (script.env.BRANCH_NAME == 'master' && script.env.JOB_URL.contains('ufz'))
         return true;
     return  false;
 }
 
-def getEnv(arch = 'x64') {
-    if (env.NODE_NAME == 'visserv3')
+def getEnv(script, arch = 'x64') {
+    if (script.env.NODE_NAME == 'visserv3')
         qtdir = "C:\\libs\\qt\\4.8\\msvc2013-${arch}"
-    if (env.NODE_NAME == 'win1') {
+    if (script.env.NODE_NAME == 'win1') {
         if (arch == 'x32')
             qtdir = "C:\\libs\\qt-4.8.7-x86-msvc2013\\qt-4.8.7-x86-msvc2013"
         else
