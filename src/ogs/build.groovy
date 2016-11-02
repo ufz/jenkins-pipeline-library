@@ -3,10 +3,8 @@ package ogs.build;
 //import ogs.helper;
 
 def linux(script, buildDir, target = null, cmd = 'make -j $(nproc)') {
-    // def helper = new ogs.helper()
     if (target == null) {
         target = 'all'
-        // if (helper.isRelease(script))
         if (isRelease(script))
             target = 'package'
     }
@@ -14,10 +12,8 @@ def linux(script, buildDir, target = null, cmd = 'make -j $(nproc)') {
 }
 
 def win(script, buildDir, target = null) {
-    // def helper = new ogs.helper()
     targetString = ""
     if (target == null && isRelease(script))
-    // if (target == null && helper.isRelease(script))
         targetString = "--target package"
     else if (target != null)
         targetString = "--target ${target}"
