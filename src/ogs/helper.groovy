@@ -24,6 +24,19 @@ def isOriginMaster(script) {
     return  false;
 }
 
+def getTag(directory = "./") {
+    def tagName
+    dir(directory) {
+        hasTag = sh(returnStatus: true, script: 'git describe --exact-match --tags HEAD')
+        if (hasTag == 0) {
+            // echo 'has tag!'
+            return sh(returnStdout: true, returnStatus: false, script: 'git describe --exact-match --tags HEAD').trim()
+        }
+        else
+            return ''
+    }
+}
+
 def getEnv(script, arch = 'x64') {
     if (script.env.NODE_NAME == 'visserv3')
         qtdir = "C:\\libs\\qt\\4.8\\msvc2013-${arch}"
