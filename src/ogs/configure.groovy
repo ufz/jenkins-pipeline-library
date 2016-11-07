@@ -6,7 +6,7 @@ def linux(buildDir, cmakeOptions, generator = 'Unix Makefiles', conan_args = nul
               mkdir ${buildDir}""".stripIndent())
     if (conan_args != null)
         sh("""cd ${buildDir}
-              conan install ../ogs ${conan_args}""".stripIndent())
+              conan install ../ogs -u ${conan_args}""".stripIndent())
     sh """cd ${buildDir}
           cmake ../ogs -G "${generator}" ${cmakeOptions}"""
 }
@@ -18,7 +18,7 @@ def win(buildDir, cmakeOptions, generator, conan_args = null, keepBuildDir = fal
 
     if (conan_args != null)
         bat("""cd ${buildDir}
-               conan install ../ogs ${conan_args}""".stripIndent())
+               conan install ../ogs -u ${conan_args}""".stripIndent())
 
     vcvarsallParam = "amd64"
         if (buildDir.endsWith("32"))
