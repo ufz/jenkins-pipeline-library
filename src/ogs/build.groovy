@@ -1,21 +1,17 @@
 package ogs.build;
 
-//import ogs.helper;
-
 def linux(script, buildDir, target = null, cmd = 'make -j $(nproc)') {
     if (target == null) {
-        target = 'all'
-        if (isRelease(script))
-            target = 'package'
+        target = 'package'
     }
     sh "cd ${buildDir} && ${cmd} ${target}"
 }
 
 def win(script, buildDir, target = null) {
     targetString = ""
-    if (target == null && isRelease(script))
+    if (target == null)
         targetString = "--target package"
-    else if (target != null)
+    else
         targetString = "--target ${target}"
 
     vcvarsallParam = "amd64"
@@ -26,16 +22,4 @@ def win(script, buildDir, target = null) {
            call "%vs120comntools%..\\..\\VC\\vcvarsall.bat" ${vcvarsallParam}
            cd ${buildDir}
            cmake --build . --config Release ${targetString}""".stripIndent())
-}
-
-def isRelease(script) {
-    if (script == null)
-        return false;
-    if (script.env == null)
-        return false;
-    if (script.env.BRANCH_NAME == null)
-        return false;
-    if (script.env.BRANCH_NAME == 'master' || script.env.BRANCH_NAME.contains('release'))
-        return true;
-    return false;
 }
