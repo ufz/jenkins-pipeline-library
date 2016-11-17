@@ -1,18 +1,19 @@
 package ogs.build;
 
 def linux(script, buildDir, target = null, cmd = 'make -j $(nproc)') {
-    if (target == null) {
-        target = 'package'
+    if (target == null || target == 'package') {
+        sh "cd ${buildDir} && bash package.sh"
     }
-    sh "cd ${buildDir} && ${cmd} ${target}"
+    else
+        sh "cd ${buildDir} && ${cmd} ${target}"
 }
 
 def win(script, buildDir, target = null) {
     targetString = ""
-    if (target == null)
-        targetString = "--target package"
+    if (target == null || target == 'package')
+        buildString = "CALL package.cmd"
     else
-        targetString = "--target ${target}"
+        buildString = "cmake --build . --config Release --target ${target}"
 
     vcvarsallParam = "amd64"
     if (buildDir.endsWith("32"))
@@ -21,5 +22,5 @@ def win(script, buildDir, target = null) {
     bat("""set path=%path:\"=%
            call "%vs120comntools%..\\..\\VC\\vcvarsall.bat" ${vcvarsallParam}
            cd ${buildDir}
-           cmake --build . --config Release ${targetString}""".stripIndent())
+           ${buildString}""".stripIndent())
 }
