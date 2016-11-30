@@ -38,19 +38,35 @@ def getTag(directory = "./") {
 }
 
 def getEnv(script, arch = 'x64') {
-    if (script.env.NODE_NAME == 'visserv3')
-        qtdir = "C:\\libs\\qt\\4.8\\msvc2013-${arch}"
-    if (script.env.NODE_NAME == 'win1') {
+    node_name = script.env.NODE_NAME
+    msvc_version = '2013'
+    msvc_number = '12'
+    conan_arch = 'x86'
+    if (arch == 'x32')
+        conan_arch = 'x86_64'
+
+    if (node_name == 'visserv3')
+        qtdir = "C:\\libs\\qt\\4.8\\msvc${msvc_version}-${arch}"
+    if (node_name == 'win1') {
         if (arch == 'x32')
-            qtdir = "C:\\libs\\qt-4.8.7-x86-msvc2013\\qt-4.8.7-x86-msvc2013"
+            qtdir = "C:\\libs\\qt-4.8.7-x86-msvc${msvc_version}\\qt-4.8.7-x86-msvc${msvc_version}"
         else
-            qtdir = "C:\\libs\\qt-4.8.7-${arch}-msvc2013\\qt-4.8.7-${arch}-msvc2013"
+            qtdir = "C:\\libs\\qt-4.8.7-${arch}-msvc${msvc_version}\\qt-4.8.7-${arch}-msvc${msvc_version}"
     }
+    if (node_name == 'winserver1') {
+        msvc_version = 2015
+        msvc_number = 14
+        // TODO qtdir = ...
+    }
+
 
     return [
         "QTDIR=${qtdir}",
         'Path=$Path;$QTDIR\\bin',
         'CONAN_CMAKE_GENERATOR=Ninja',
-        "ARCH=${arch}"
+        "CONAN_ARCH=${conan_arch}",
+        "ARCH=${arch}",
+        "MSVC_VERSION=${msvc_version}",
+        "MSVC_NUMBER=${msvc_number}"
     ]
 }

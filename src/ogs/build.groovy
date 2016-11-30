@@ -16,11 +16,11 @@ def win(script, buildDir, target = null) {
         buildString = "cmake --build . --config Release --target ${target}"
 
     vcvarsallParam = "amd64"
-    if (buildDir.endsWith("32"))
+    if (script.env.ARCH == 'x32')
         vcvarsallParam = "x86"
 
     bat("""set path=%path:\"=%
-           call "%vs120comntools%..\\..\\VC\\vcvarsall.bat" ${vcvarsallParam}
+           call "%vs${script.env.MSVC_NUMBER}0comntools%..\\..\\VC\\vcvarsall.bat" ${vcvarsallParam}
            cd ${buildDir}
            ${buildString}""".stripIndent())
 }
