@@ -70,3 +70,8 @@ def getEnv(script, arch = 'x64') {
         "MSVC_NUMBER=${msvc_number}"
     ]
 }
+
+def notify(message, color = 'good',
+    icon = 'http://mirrors.jenkins-ci.org/art/jenkins-logo/favicon.ico') {
+    mattermostSend color: color, message: message, icon: icon
+}
