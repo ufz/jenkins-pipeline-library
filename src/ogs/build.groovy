@@ -1,11 +1,20 @@
 package ogs.build;
 
-def linux(script, buildDir, target = null, cmd = 'make -j $(nproc)') {
-    if (target == null || target == 'package') {
-        sh "cd ${buildDir} && bash package.sh"
-    }
+def linuxWithEnv(env, buildDir, target = null, cmd = 'make -j $(nproc)') {
+    linux(buildDir, target, cmd, env)
+}
+
+def linux(buildDir, target = null, cmd = 'make -j $(nproc)', env = null) {
+    def script = ""
+
+    if (env != null)
+        script += ". ogs/scripts/env/${env}\n"
+    if (target == null || target == 'package')
+        script += "cd ${buildDir} && bash package.sh\n"
     else
-        sh "cd ${buildDir} && ${cmd} ${target}"
+        script += "cd ${buildDir} && ${cmd} ${target}\n"
+
+    sh "${script}"
 }
 
 def win(script, buildDir, target = null) {
