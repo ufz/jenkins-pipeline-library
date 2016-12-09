@@ -12,9 +12,9 @@ def linux(buildDir, cmakeOptions, generator = 'Unix Makefiles', conan_args = nul
     if (keepBuildDir == false)
         script += "rm -rf ${buildDir} && mkdir ${buildDir}\n"
     if (conan_args != null)
-        script += "cd ${buildDir} && conan install ../ogs -u ${conan_args}\n"
+        script += "(cd ${buildDir} && conan install ../ogs -u ${conan_args})\n"
 
-    script += "cd ${buildDir} && cmake ../ogs -G \"${generator}\" ${cmakeOptions}\n"
+    script += "(cd ${buildDir} && cmake ../ogs -G \"${generator}\" ${cmakeOptions})\n"
 
     sh "${script}"
 }
