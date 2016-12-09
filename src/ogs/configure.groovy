@@ -1,14 +1,22 @@
 package ogs.configure;
 
-def linux(buildDir, cmakeOptions, generator = 'Unix Makefiles', conan_args = null, keepBuildDir = false) {
+def linuxWithEnv(env, buildDir, cmakeOptions, generator = 'Unix Makefiles', conan_args = null, keepBuildDir = false) {
+    linux(buildDir, cmakeOptions, generator, conan_args, keepBuildDir, env)
+}
+
+def linux(buildDir, cmakeOptions, generator = 'Unix Makefiles', conan_args = null, keepBuildDir = false, env = null) {
+    def script = ""
+
+    if (env != null)
+        script += ". ogs/scripts/env/${env}\n"
     if (keepBuildDir == false)
-        sh("""rm -rf ${buildDir}
-              mkdir ${buildDir}""".stripIndent())
+        script += "rm -rf ${buildDir} && mkdir ${buildDir}\n"
     if (conan_args != null)
-        sh("""cd ${buildDir}
-              conan install ../ogs -u ${conan_args}""".stripIndent())
-    sh """cd ${buildDir}
-          cmake ../ogs -G "${generator}" ${cmakeOptions}"""
+        script += "cd ${buildDir} && conan install ../ogs -u ${conan_args}\n"
+
+    script += "cd ${buildDir} && cmake ../ogs -G \"${generator}\" ${cmakeOptions}\n"
+
+    sh "${script}"
 }
 
 def win(buildDir, cmakeOptions, generator, conan_args = null, keepBuildDir = false) {
