@@ -1,35 +1,52 @@
 package ogs.build;
 
-def linuxWithEnv(env, buildDir, target = null, cmd = 'make -j $(nproc)') {
-    linux(buildDir, target, cmd, env)
+class BuildParams{
+    String cmd
+    String dir
+    String env
+    Script script
+    String target
 }
 
-def linux(buildDir, target = null, cmd = 'make -j $(nproc)', env = null) {
+def linux(Map userMap = [:]) {
+    def map = [
+        cmd: 'make -j $(nproc)',
+        dir: 'build',
+        env: null,
+        target: 'package'
+    ]
+    new BuildParams(map << userMap)
+
     def script = ""
 
-    if (env != null)
-        script += ". ogs/scripts/env/${env}\n"
-    if (target == null || target == 'package')
-        script += "cd ${buildDir} && bash package.sh\n"
+    if (map.env != null)
+        script += ". ogs/scripts/env/${map.env}\n"
+    if (map.target == 'package')
+        script += "cd ${map.dir} && bash package.sh\n"
     else
-        script += "cd ${buildDir} && ${cmd} ${target}\n"
+        script += "cd ${map.dir} && ${map.cmd} ${map.target}\n"
 
     sh "${script}"
 }
 
-def win(script, buildDir, target = null) {
-    targetString = ""
-    if (target == null || target == 'package')
+def win(Map userMap = [:]) {
+    def map = [
+        dir: 'build',
+        target: 'package'
+    ]
+    new BuildParams(map << userMap)
+
+    if (map.target == 'package')
         buildString = "CALL package.cmd"
     else
-        buildString = "cmake --build . --config Release --target ${target}"
+        buildString = "cmake --build . --config Release --target ${map.target}"
 
     vcvarsallParam = "amd64"
-    if (script.env.ARCH == 'x32')
+    if (map.script.env.ARCH == 'x32')
         vcvarsallParam = "x86"
 
     bat("""set path=%path:\"=%
-           call "%vs${script.env.MSVC_NUMBER}0comntools%..\\..\\VC\\vcvarsall.bat" ${vcvarsallParam}
-           cd ${buildDir}
+           call "%vs${map.script.env.MSVC_NUMBER}0comntools%..\\..\\VC\\vcvarsall.bat" ${vcvarsallParam}
+           cd ${map.dir}
            ${buildString}""".stripIndent())
 }
