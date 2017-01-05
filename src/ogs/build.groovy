@@ -21,10 +21,7 @@ def linux(Map userMap = [:]) {
 
     if (map.env != null)
         script += ". ogs/scripts/env/${map.env}\n"
-    if (map.target == 'package')
-        script += "cd ${map.dir} && bash package.sh\n"
-    else
-        script += "cd ${map.dir} && ${map.cmd} ${map.target}\n"
+    script += "cd ${map.dir} && ${map.cmd} ${map.target}\n"
 
     sh "${script}"
 }
@@ -36,10 +33,7 @@ def win(Map userMap = [:]) {
     ]
     new BuildParams(map << userMap)
 
-    if (map.target == 'package')
-        buildString = "CALL package.cmd"
-    else
-        buildString = "cmake --build . --config Release --target ${map.target}"
+    buildString = "cmake --build . --config Release --target ${map.target}"
 
     vcvarsallParam = "amd64"
     if (map.script.env.ARCH == 'x32')
