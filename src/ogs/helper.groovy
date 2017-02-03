@@ -37,10 +37,11 @@ def getTag(directory = "./") {
     }
 }
 
-def getEnv(script, arch = 'x64') {
+def getEnv(script, arch = 'x64', msvc_number = '14') {
     node_name = script.env.NODE_NAME
     msvc_version = '2015'
-    msvc_number = '14'
+    if (msvc_number == '12')
+        msvc_version = '2013'
     conan_arch = 'x86'
     if (arch == 'x32')
         conan_arch = 'x86_64'
