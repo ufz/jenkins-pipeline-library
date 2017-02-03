@@ -9,6 +9,7 @@ class ConfigParams{
     String generator
     boolean keepDir
     Script script
+    String sourceDir
     boolean useConan
 }
 
@@ -21,6 +22,7 @@ def linux(Map userMap = [:]) {
         env: null,
         generator: 'Unix Makefiles',
         keepDir: false,
+        sourceDir: 'ogs',
         useConan: false
     ]
     new ConfigParams(map << userMap)
@@ -28,7 +30,7 @@ def linux(Map userMap = [:]) {
     def script = ""
 
     if (map.env != null)
-        script += ". ogs/scripts/env/${map.env}\n"
+        script += ". ${map.sourceDir}/scripts/env/${map.env}\n"
     if (map.keepDir == false)
         script += "rm -rf ${map.dir} && mkdir ${map.dir}\n"
     if (map.useConan) {
@@ -36,10 +38,10 @@ def linux(Map userMap = [:]) {
             "-u " +
             "-s build_type=${map.config} " +
             "-s arch=${map.arch}"
-        script += "(cd ${map.dir} && conan install ../ogs ${conan_args})\n"
+        script += "(cd ${map.dir} && conan install ../${map.sourceDir} ${conan_args})\n"
     }
 
-    script += "(cd ${map.dir} && cmake ../ogs -G \"${map.generator}\" ${map.cmakeOptions})\n"
+    script += "(cd ${map.dir} && cmake ../${map.sourceDir} -G \"${map.generator}\" ${map.cmakeOptions})\n"
 
     sh "${script}"
 }
@@ -52,6 +54,7 @@ def win(Map userMap = [:]) {
         dir: 'build',
         generator: 'Ninja',
         keepDir: false,
+        sourceDir: 'ogs',
         useConan: true
     ]
     new ConfigParams(map << userMap)
@@ -67,7 +70,7 @@ def win(Map userMap = [:]) {
             "-s build_type=${map.config} " +
             "-s arch=${map.arch}"
 
-        bat "cd ${map.dir} && conan install ../ogs ${conan_args}"
+        bat "cd ${map.dir} && conan install ../${map.sourceDir} ${conan_args}"
     }
 
     vcvarsallParam = "amd64"
@@ -77,5 +80,5 @@ def win(Map userMap = [:]) {
     bat """set path=%path:\"=%
            call "%vs${map.script.env.MSVC_NUMBER}0comntools%..\\..\\VC\\vcvarsall.bat" ${vcvarsallParam}
            cd ${map.dir}
-           cmake ../ogs -G "${map.generator}" -DCMAKE_BUILD_TYPE=${map.config} ${map.cmakeOptions}""".stripIndent()
+           cmake ../${map.sourceDir} -G "${map.generator}" -DCMAKE_BUILD_TYPE=${map.config} ${map.cmakeOptions}""".stripIndent()
 }
