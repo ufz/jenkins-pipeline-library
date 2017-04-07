@@ -37,21 +37,31 @@ def getTag(directory = "./") {
     }
 }
 
-def getEnv(script, arch = 'x64', msvc_number = '14') {
+def getEnv(script, arch = 'x64', msvc_number = '15') {
     node_name = script.env.NODE_NAME
-    msvc_version = '2015'
-    if (msvc_number == '12')
-        msvc_version = '2013'
+
     conan_arch = 'x86'
     if (arch == 'x32')
         conan_arch = 'x86_64'
+
+    if (msvc_number == '12')
+        msvc_version = '2013'
+    if (msvc_number == '14')
+        msvc_version = '2015'
+    if (msvc_number == '15')
+        msvc_version = '2017'
+
+    msvc_sdk = '8.1'
+    if (msvc_number == '15')
+        msvc_sdk = '10'
 
     return [
         'CONAN_CMAKE_GENERATOR=Ninja',
         "CONAN_ARCH=${conan_arch}",
         "ARCH=${arch}",
         "MSVC_VERSION=${msvc_version}",
-        "MSVC_NUMBER=${msvc_number}"
+        "MSVC_NUMBER=${msvc_number}",
+        "MSVC_SDK=${msvc_sdk}"
     ]
 }
 

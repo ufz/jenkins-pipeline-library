@@ -59,26 +59,41 @@ def win(Map userMap = [:]) {
     ]
     new ConfigParams(map << userMap)
 
+    env = map.script.env
+
     if (map.keepDir == false)
         bat "rd /S /Q ${map.dir} 2>nul & mkdir ${map.dir}"
 
     if (map.useConan) {
+        conanCompilerVersion = env.MSVC_NUMBER
+        if (env.MSVC_NUMBER == '15') // 14 and 15 are binary compatible
+            conanCompilerVersion = '14'
         def conan_args =
             "-u " +
             "-s compiler=\"Visual Studio\" " +
-            "-s compiler.version=${map.script.env.MSVC_NUMBER} " +
+            "-s compiler.version=${conanCompilerVersion} " +
             "-s build_type=${map.config} " +
             "-s arch=${map.arch}"
 
         bat "cd ${map.dir} && conan install ../${map.sourceDir} ${conan_args}"
     }
 
+    generator = "Visual Studio " + env.MSVC_NUMBER + " " + env.MSVC_VERSION
+    if (map.arch == "x86_64")
+        generator = generator + " Win64"
+    if (map.generator == 'Ninja')
+        generator = 'Ninja'
+
+    vcvarsllDir = "%vs${env.MSVC_NUMBER}0comntools%..\\..\\VC"
+    if ((env.MSVC_NUMBER as Integer) >= 15)
+        vcvarsllDir = "C:\\Program Files (x86)\\Microsoft Visual Studio\\${env.MSVC_VERSION}\\Community\\VC\\Auxiliary\\Build"
+
     vcvarsallParam = "amd64"
     if (map.arch == "x86")
         vcvarsallParam = "x86"
 
-    bat """set path=%path:\"=%
-           call "%vs${map.script.env.MSVC_NUMBER}0comntools%..\\..\\VC\\vcvarsall.bat" ${vcvarsallParam}
+    bat """:: set path=%path:\"=%
+           call "${vcvarsllDir}\\vcvarsall.bat" ${vcvarsallParam}
            cd ${map.dir}
-           cmake ../${map.sourceDir} -G "${map.generator}" -DCMAKE_BUILD_TYPE=${map.config} ${map.cmakeOptions}""".stripIndent()
+           cmake ../${map.sourceDir} -G "${generator}" -DCMAKE_BUILD_TYPE=${map.config} ${map.cmakeOptions}""".stripIndent()
 }

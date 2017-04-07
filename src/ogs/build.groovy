@@ -33,14 +33,20 @@ def win(Map userMap = [:]) {
     ]
     new BuildParams(map << userMap)
 
+    env = map.script.env
+
     buildString = "cmake --build . --config Release --target ${map.target}"
 
+    vcvarsllDir = "%vs${env.MSVC_NUMBER}0comntools%..\\..\\VC"
+    if ((env.MSVC_NUMBER as Integer) >= 15)
+        vcvarsllDir = "C:\\Program Files (x86)\\Microsoft Visual Studio\\${env.MSVC_VERSION}\\Community\\VC\\Auxiliary\\Build"
+
     vcvarsallParam = "amd64"
-    if (map.script.env.ARCH == 'x32')
+    if (env.ARCH == 'x32')
         vcvarsallParam = "x86"
 
     bat("""set path=%path:\"=%
-           call "%vs${map.script.env.MSVC_NUMBER}0comntools%..\\..\\VC\\vcvarsall.bat" ${vcvarsallParam}
+           call "${vcvarsllDir}\\vcvarsall.bat" ${vcvarsallParam}
            cd ${map.dir}
            ${buildString}""".stripIndent())
 }
