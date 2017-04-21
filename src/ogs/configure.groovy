@@ -4,6 +4,7 @@ class ConfigParams{
     String arch
     String config
     String cmakeOptions
+    String conanOptions
     String dir
     String env
     String generator
@@ -18,6 +19,7 @@ def linux(Map userMap = [:]) {
         arch: 'x86_64',
         config: 'Release',
         cmakeOptions: '',
+        conanOptions: '',
         dir: 'build',
         env: null,
         generator: 'Unix Makefiles',
@@ -35,6 +37,7 @@ def linux(Map userMap = [:]) {
         script += "rm -rf ${map.dir} && mkdir ${map.dir}\n"
     if (map.useConan) {
         def conan_args =
+            "${map.conanOptions} " +
             "-u " +
             "-s build_type=${map.config} " +
             "-s arch=${map.arch}"
@@ -51,6 +54,7 @@ def win(Map userMap = [:]) {
         arch: 'x86_64',
         config: 'Release',
         cmakeOptions: '',
+        conanOptions: '',
         dir: 'build',
         generator: 'Ninja',
         keepDir: false,
@@ -69,6 +73,7 @@ def win(Map userMap = [:]) {
         if (env.MSVC_NUMBER == '15') // 14 and 15 are binary compatible
             conanCompilerVersion = '14'
         def conan_args =
+            "${map.conanOptions} " +
             "-u " +
             "-s compiler=\"Visual Studio\" " +
             "-s compiler.version=${conanCompilerVersion} " +
