@@ -1,6 +1,6 @@
 package ogs.post;
 
-def publishTestReports(ctestPattern, gtestPattern, parseRulefile) {
+def publishTestReports(ctestPattern, gtestPattern) {
     step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1,
         thresholds: [
             [$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '',
