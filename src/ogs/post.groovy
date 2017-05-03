@@ -13,9 +13,6 @@ def publishTestReports(ctestPattern, gtestPattern, parseRulefile) {
             [$class: 'GoogleTestType', deleteOutputFiles: true, failIfNotNew: true, pattern:
                 "${gtestPattern}", skipNoTestFiles: true, stopProcessingIfError: true]]
     ])
-
-    step([$class: 'LogParserPublisher', failBuildOnError: true, unstableOnWarning: false,
-        projectRulePath: "${parseRulefile}", useProjectRule: true])
 }
 
 def cleanup(directory = 'build') {
