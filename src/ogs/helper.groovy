@@ -76,7 +76,54 @@ getEnvLinux(script) {
     return array
 }
 
-def notify(message, color = 'good',
-    icon = 'http://mirrors.jenkins-ci.org/art/jenkins-logo/favicon.ico') {
-    mattermostSend color: color, message: message, icon: icon
+class NotifyParams{
+    String msg       // Required
+    String title     // Defaults to 'Jenkins'
+    String url       // Defaults to BUILD_URL
+    String url_title // Defaults to JOB_NAME + BUILD_NUMBER
+    int priority     // Defaults to 0
+    String sound     // See https://pushover.net/api#sounds
+    Script script    // Required, pass 'this' pointer
+}
+
+def notification(Map userMap = [:]) {
+    def map = [
+        title: null,
+        url: userMap.script.env.BUILD_URL,
+        url_title: userMap.script.env.JOB_NAME + "#" +
+                   userMap.script.env.BUILD_NUMBER,
+        priority: 0,
+        sound: null
+    ]
+    new NotifyParams(map << userMap)
+
+    def body = ""
+    node {
+        def secrets = [
+            [$class: 'VaultSecret', path: 'jenkins/pushover', secretValues: [
+                [$class: 'VaultSecretValue', envVar: 'PUSHOVER_TOKEN', vaultKey: 'token'],
+                [$class: 'VaultSecretValue', envVar: 'PUSHOVER_GROUP', vaultKey: 'group_devs']]],
+        ]
+
+        wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
+            body += "token=${this.env.PUSHOVER_TOKEN}"
+            body += "&user=${this.env.PUSHOVER_GROUP}"
+        }
+    }
+
+    body += "&message=${map.msg}"
+    body += "&priority=${map.priority}"
+    body += "&url=${map.url}"
+    body += "&url_title=${map.url_title}"
+
+    if (map.title != null)
+        body += "&title=${map.title}"
+    if (map.sound != null)
+        body += "&sound=${map.sound}"
+
+    httpRequest(
+        url: 'https://api.pushover.net/1/messages.json',
+        httpMode: 'POST',
+        requestBody: body
+    )
 }
