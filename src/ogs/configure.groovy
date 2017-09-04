@@ -4,14 +4,12 @@ class ConfigParams{
     String arch
     String config
     String cmakeOptions
-    String conanOptions
     String dir
     String env
     String generator
     boolean keepDir
     Script script
     String sourceDir
-    boolean useConan
 }
 
 def linux(Map userMap = [:]) {
@@ -19,13 +17,11 @@ def linux(Map userMap = [:]) {
         arch: 'x86_64',
         config: 'Release',
         cmakeOptions: '',
-        conanOptions: '',
         dir: 'build',
         env: null,
         generator: 'Unix Makefiles',
         keepDir: false,
-        sourceDir: 'ogs',
-        useConan: false
+        sourceDir: 'ogs'
     ]
     new ConfigParams(map << userMap)
 
@@ -35,14 +31,6 @@ def linux(Map userMap = [:]) {
         script += ". ${map.sourceDir}/scripts/env/${map.env}\n"
     if (map.keepDir == false)
         script += "rm -rf ${map.dir} && mkdir ${map.dir}\n"
-    if (map.useConan) {
-        def conan_args =
-            "${map.conanOptions} " +
-            "-u " +
-            "-s build_type=${map.config} " +
-            "-s arch=${map.arch}"
-        script += "(cd ${map.dir} && conan install ../${map.sourceDir} ${conan_args})\n"
-    }
 
     script += "(cd ${map.dir} && cmake ../${map.sourceDir} -G \"${map.generator}\" ${map.cmakeOptions})\n"
 
@@ -54,12 +42,10 @@ def win(Map userMap = [:]) {
         arch: 'x86_64',
         config: 'Release',
         cmakeOptions: '',
-        conanOptions: '',
         dir: 'build',
         generator: 'Ninja',
         keepDir: false,
-        sourceDir: 'ogs',
-        useConan: true
+        sourceDir: 'ogs'
     ]
     new ConfigParams(map << userMap)
 
@@ -67,21 +53,6 @@ def win(Map userMap = [:]) {
 
     if (map.keepDir == false)
         bat "rd /S /Q ${map.dir} 2>nul & mkdir ${map.dir}"
-
-    if (map.useConan) {
-        conanCompilerVersion = env.MSVC_NUMBER
-        if (env.MSVC_NUMBER == '15') // 14 and 15 are binary compatible
-            conanCompilerVersion = '14'
-        def conan_args =
-            "${map.conanOptions} " +
-            "-u " +
-            "-s compiler=\"Visual Studio\" " +
-            "-s compiler.version=${conanCompilerVersion} " +
-            "-s build_type=${map.config} " +
-            "-s arch=${map.arch}"
-
-        bat "cd ${map.dir} && conan install ../${map.sourceDir} ${conan_args}"
-    }
 
     generator = "Visual Studio " + env.MSVC_NUMBER + " " + env.MSVC_VERSION
     if (map.arch == "x86_64")
