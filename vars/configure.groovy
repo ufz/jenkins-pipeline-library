@@ -8,7 +8,7 @@ def call(body) {
   def isUnix = isUnix()
 
   // defaults
-   if (!map.containsKey('arch'))
+  if (!map.containsKey('arch'))
     map['arch'] = 'x86_64'
   if (!map.containsKey('config'))
     map['config'] = 'Release'
