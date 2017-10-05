@@ -5,7 +5,13 @@ def call(body) {
   body.delegate = map
   body()
 
+  def isUnix = isUnix()
+
   // defaults
+   if (!map.containsKey('arch'))
+    map['arch'] = 'x86_64'
+  if (!map.containsKey('config'))
+    map['config'] = 'Release'
   if (!map.containsKey('dir'))
     map['dir'] = 'build'
   if (!map.containsKey('sourceDir'))
@@ -16,17 +22,39 @@ def call(body) {
   if (!map.containsKey('generator')) {
     if (isUnix)
       map['generator'] = 'Unix Makefiles'
-    else
+    else {
       map['generator'] = 'Ninja'
+    }
   }
 
   def script = ""
+
+  if (!isUnix) {
+    // Win-specific
+    vcvarsllDir = "%vs${env.MSVC_NUMBER}0comntools%..\\..\\VC"
+    if ((env.MSVC_NUMBER as Integer) >= 15)
+      vcvarsllDir = "C:\\Program Files (x86)\\Microsoft Visual Studio\\${env.MSVC_VERSION}\\Community\\VC\\Auxiliary\\Build"
+
+    vcvarsallParam = "amd64"
+    if (map.arch == "x86")
+      vcvarsallParam = "x86"
+    script += ":: set path=%path:\"=%\n"
+    script += "call \"${vcvarsllDir}\\vcvarsall.bat\" ${vcvarsallParam}\n"
+  }
+
   if (map.env != null)
     script += ". ${map.sourceDir}/scripts/env/${map.env}\n"
-  if (map.keepDir == false)
-    script += "rm -rf ${map.dir} && mkdir ${map.dir}\n"
+  if (map.keepDir == false) {
+    if (isUnix)
+      script += "rm -rf ${map.dir} && mkdir ${map.dir}\n"
+    else
+      script += "rd /S /Q ${map.dir} 2>nul & mkdir ${map.dir}\n"
+  }
 
-  script += "(cd ${map.dir} && cmake ../${map.sourceDir} -G \"${map.generator}\" ${map.cmakeOptions})\n"
+  script += "(cd ${map.dir} && cmake ../${map.sourceDir} -G \"${map.generator}\" -DCMAKE_BUILD_TYPE=${map.config} ${map.cmakeOptions})\n"
 
-  sh "${script}"
+  if (isUnix)
+    sh "${script}"
+  else
+    bat "${script}"
 }
