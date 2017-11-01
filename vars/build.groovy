@@ -11,7 +11,7 @@ def call(body) {
   if (!map.containsKey('dir'))
     map['dir'] = 'build'
   if (!map.containsKey('source_dir'))
-    map['dir'] = '.'
+    map['source_dir'] = '.'
   if (!map.containsKey('config'))
     map['config'] = 'Release'
   if (!map.containsKey('target'))
