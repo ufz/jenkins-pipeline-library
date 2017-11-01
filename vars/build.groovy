@@ -10,6 +10,8 @@ def call(body) {
   // defaults
   if (!map.containsKey('dir'))
     map['dir'] = 'build'
+  if (!map.containsKey('source_dir'))
+    map['dir'] = '.'
   if (!map.containsKey('config'))
     map['config'] = 'Release'
   if (!map.containsKey('target'))
@@ -33,7 +35,7 @@ def call(body) {
   }
 
   if (map.env != null)
-    script += ". ogs/scripts/env/${map.env}\n"
+    script += ". ${map.source_dir}/scripts/env/${map.env}\n"
   script += "cd ${map.dir} && ${map.cmd}\n"
 
   if (isUnix)

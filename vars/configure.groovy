@@ -15,7 +15,7 @@ def call(body) {
   if (!map.containsKey('dir'))
     map['dir'] = 'build'
   if (!map.containsKey('sourceDir'))
-    map['sourceDir'] = 'ogs'
+    map['sourceDir'] = '.'
   if (!map.containsKey('keepDir'))
     map['keepDir'] = false
 
