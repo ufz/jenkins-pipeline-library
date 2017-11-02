@@ -20,11 +20,7 @@ def call(body) {
     map['keepDir'] = false
 
   if (!map.containsKey('generator')) {
-    if (isUnix)
-      map['generator'] = 'Unix Makefiles'
-    else {
-      map['generator'] = 'Ninja'
-    }
+    map['generator'] = 'Ninja'
   }
 
   def script = ""
