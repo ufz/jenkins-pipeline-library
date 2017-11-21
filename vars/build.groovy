@@ -18,6 +18,8 @@ def call(body) {
     map['target'] = 'package'
   if (!map.containsKey('cmd'))
     map['cmd'] = "cmake --build . --config ${map.config} --target ${map.target}"
+  if (map.containsKey('cmd_args'))
+    map['cmd'] = "${map.cmd} -- ${map.cmd_args}"
 
   def script = ""
 

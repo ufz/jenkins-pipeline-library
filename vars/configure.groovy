@@ -18,10 +18,8 @@ def call(body) {
     map['sourceDir'] = '.'
   if (!map.containsKey('keepDir'))
     map['keepDir'] = false
-
-  if (!map.containsKey('generator')) {
+  if (!map.containsKey('generator'))
     map['generator'] = 'Ninja'
-  }
 
   def script = ""
 
