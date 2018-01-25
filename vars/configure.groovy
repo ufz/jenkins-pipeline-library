@@ -20,6 +20,8 @@ def call(body) {
     map['keepDir'] = false
   if (!map.containsKey('generator'))
     map['generator'] = 'Ninja'
+  if (!map.containsKey('cmakeOptions'))
+    map['cmakeOptions'] = ''
 
   def script = ""
 
