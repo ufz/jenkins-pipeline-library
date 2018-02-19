@@ -167,6 +167,30 @@ def call(String reference) {
             }
             post { always { cleanWs() } }
           }
+          // ************************** macos ***********************************
+          stage('macos') {
+            agent {label 'mac && conan' }
+            environment {
+              CONAN_REFERENCE = "${reference}"
+              JFROG = credentials('3a3e2a63-4509-43c9-a2e9-ea0c50fdcd4c')
+              CONAN_USERNAME = "bilke"
+              CONAN_CHANNEL = "testing"
+              CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
+              CONAN_STABLE_BRANCH_PATTERN = "release/*"
+              CONAN_USER_HOME = "$WORKSPACE/conan"
+              CONAN_APPLE_CLANG_VERSIONS = "9.0"
+            }
+            steps {
+              script {
+                withEnv(['CONAN_LOGIN_USERNAME=$JFROG_USR', 'CONAN_PASSWORD=$JFROG_PSW']) {
+                  sh "conan remove -f ${reference}"
+                  sh 'python2 build.py'
+                  sh 'rm -rf %CONAN_USER_HOME%'
+                }
+              }
+            }
+            post { always { cleanWs() } }
+          }
         } // end parallel
       }
     }
