@@ -11,11 +11,43 @@ def call(String reference) {
     stages {
       stage('Build') {
         parallel {
+          // ************************** glang39 ********************************
+          stage('clang39') {
+            agent {
+              docker {
+                image 'ogs6/conan_clang39'
+                label 'docker'
+                alwaysPull true
+              }
+            }
+            environment {
+              CONAN_REFERENCE = "${reference}"
+              JFROG = credentials('3a3e2a63-4509-43c9-a2e9-ea0c50fdcd4c')
+              CONAN_USERNAME = "bilke"
+              CONAN_CHANNEL = "testing"
+              CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
+              CONAN_STABLE_BRANCH_PATTERN = "release/*"
+              CONAN_CLANG_VERSIONS = "3.9"
+              CONAN_USER_HOME = "$WORKSPACE/conan"
+            }
+            steps {
+              script {
+                withEnv(['CONAN_LOGIN_USERNAME=$JFROG_USR', 'CONAN_PASSWORD=$JFROG_PSW']) {
+                  sh 'sudo pip install conan_package_tools'
+                  sh 'conan user'
+                  sh("conan remove -f ${reference}")
+                  sh 'python build.py'
+                  sh 'rm -r $CONAN_USER_HOME'
+                }
+              }
+            }
+            post { always { cleanWs() } }
+          }
           // *************************** gcc49 ************************************
           stage('gcc49') {
             agent {
               docker {
-                image 'ogs6/conangcc49'
+                image 'ogs6/conan_gcc49'
                 label 'docker'
                 args '-v /home/jenkins/.ccache:/usr/src/.ccache'
                 alwaysPull true
@@ -48,7 +80,7 @@ def call(String reference) {
           stage('gcc5') {
             agent {
               docker {
-                image 'ogs6/conangcc5'
+                image 'ogs6/conan_gcc5'
                 label 'docker'
                 args '-v /home/jenkins/.ccache:/usr/src/.ccache'
                 alwaysPull true
@@ -81,7 +113,7 @@ def call(String reference) {
           stage('gcc6') {
             agent {
               docker {
-                image 'ogs6/conangcc6'
+                image 'ogs6/conan_gcc6'
                 label 'docker'
                 args '-v /home/jenkins/.ccache:/usr/src/.ccache'
                 alwaysPull true
@@ -114,7 +146,7 @@ def call(String reference) {
           stage('gcc7') {
             agent {
               docker {
-                image 'ogs6/conangcc7'
+                image 'ogs6/conan_gcc7'
                 label 'docker'
                 args '-v /home/jenkins/.ccache:/usr/src/.ccache'
                 alwaysPull true
