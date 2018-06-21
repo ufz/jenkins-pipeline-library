@@ -210,7 +210,7 @@ def call(String reference) {
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
               CONAN_STABLE_BRANCH_PATTERN = "release/*"
               CONAN_USER_HOME = "$WORKSPACE/conan"
-              CONAN_APPLE_CLANG_VERSIONS = "9.0"
+              CONAN_APPLE_CLANG_VERSIONS = "9.1"
             }
             steps {
               script {
