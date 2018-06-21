@@ -26,9 +26,10 @@ def call(String reference) {
               CONAN_USERNAME = "bilke"
               CONAN_CHANNEL = "testing"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
-              CONAN_STABLE_BRANCH_PATTERN = "release/*"
+              CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_CLANG_VERSIONS = "3.9"
               CONAN_USER_HOME = "$WORKSPACE/conan"
+              CONAN_ARCHS = "x86_64"
             }
             steps {
               script {
@@ -59,9 +60,10 @@ def call(String reference) {
               CONAN_USERNAME = "bilke"
               CONAN_CHANNEL = "testing"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
-              CONAN_STABLE_BRANCH_PATTERN = "release/*"
+              CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_GCC_VERSIONS = "4.9"
               CONAN_USER_HOME = "$WORKSPACE/conan"
+              CONAN_ARCHS = "x86_64"
             }
             steps {
               script {
@@ -92,9 +94,10 @@ def call(String reference) {
               CONAN_USERNAME = "bilke"
               CONAN_CHANNEL = "testing"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
-              CONAN_STABLE_BRANCH_PATTERN = "release/*"
+              CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_GCC_VERSIONS = "5"
               CONAN_USER_HOME = "$WORKSPACE/conan"
+              CONAN_ARCHS = "x86_64"
             }
             steps {
               script {
@@ -125,9 +128,10 @@ def call(String reference) {
               CONAN_USERNAME = "bilke"
               CONAN_CHANNEL = "testing"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
-              CONAN_STABLE_BRANCH_PATTERN = "release/*"
+              CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_GCC_VERSIONS = "6"
               CONAN_USER_HOME = "$WORKSPACE/conan"
+              CONAN_ARCHS = "x86_64"
             }
             steps {
               script {
@@ -158,9 +162,10 @@ def call(String reference) {
               CONAN_USERNAME = "bilke"
               CONAN_CHANNEL = "testing"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
-              CONAN_STABLE_BRANCH_PATTERN = "release/*"
+              CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_GCC_VERSIONS = "7"
               CONAN_USER_HOME = "$WORKSPACE/conan"
+              CONAN_ARCHS = "x86_64"
             }
             steps {
               script {
@@ -184,9 +189,10 @@ def call(String reference) {
               CONAN_USERNAME = "bilke"
               CONAN_CHANNEL = "testing"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
-              CONAN_STABLE_BRANCH_PATTERN = "release/*"
+              CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_VISUAL_VERSIONS = "15"
               CONAN_USER_HOME = "$WORKSPACE\\conan"
+              CONAN_ARCHS = "x86_64"
             }
             steps {
               script {
@@ -208,7 +214,7 @@ def call(String reference) {
               CONAN_USERNAME = "bilke"
               CONAN_CHANNEL = "testing"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
-              CONAN_STABLE_BRANCH_PATTERN = "release/*"
+              CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_USER_HOME = "$WORKSPACE/conan"
               CONAN_APPLE_CLANG_VERSIONS = "9.1"
             }
