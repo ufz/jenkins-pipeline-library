@@ -34,6 +34,7 @@ def call(String reference) {
             steps {
               script {
                 withEnv(['CONAN_LOGIN_USERNAME=$JFROG_USR', 'CONAN_PASSWORD=$JFROG_PSW']) {
+                  sh 'printenv'
                   sh 'sudo pip install bincrafters-package-tools'
                   sh 'conan user'
                   sh("conan remove -f ${reference}")
