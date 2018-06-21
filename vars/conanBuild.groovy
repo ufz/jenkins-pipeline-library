@@ -30,14 +30,16 @@ def call(String reference) {
               CONAN_CLANG_VERSIONS = "3.9"
               CONAN_USER_HOME = "$WORKSPACE/conan"
               CONAN_ARCHS = "x86_64"
+              CONAN_SKIP_CHECK_CREDENTIALS = "1"
             }
             steps {
               script {
                 withEnv(['CONAN_LOGIN_USERNAME=$JFROG_USR', 'CONAN_PASSWORD=$JFROG_PSW']) {
                   sh 'printenv'
                   sh 'sudo pip install bincrafters-package-tools'
-                  sh 'conan user'
-                  sh("conan remove -f ${reference}")
+                  sh "conan remove -f ${reference}"
+                  sh "conan remote add upload_repo $CONAN_UPLOAD"
+                  sh "conan user $JFROG_USR -p $JFROG_PSW -r upload_repo"
                   sh 'python build.py'
                   sh 'rm -r $CONAN_USER_HOME'
                 }
@@ -65,13 +67,15 @@ def call(String reference) {
               CONAN_GCC_VERSIONS = "4.9"
               CONAN_USER_HOME = "$WORKSPACE/conan"
               CONAN_ARCHS = "x86_64"
+              CONAN_SKIP_CHECK_CREDENTIALS = "1"
             }
             steps {
               script {
                 withEnv(['CONAN_LOGIN_USERNAME=$JFROG_USR', 'CONAN_PASSWORD=$JFROG_PSW']) {
                   sh 'sudo pip install bincrafters-package-tools'
-                  sh 'conan user'
-                  sh("conan remove -f ${reference}")
+                  sh "conan remove -f ${reference}"
+                  sh "conan remote add upload_repo $CONAN_UPLOAD"
+                  sh "conan user $JFROG_USR -p $JFROG_PSW -r upload_repo"
                   sh 'python build.py'
                   sh 'rm -r $CONAN_USER_HOME'
                 }
@@ -99,13 +103,15 @@ def call(String reference) {
               CONAN_GCC_VERSIONS = "5"
               CONAN_USER_HOME = "$WORKSPACE/conan"
               CONAN_ARCHS = "x86_64"
+              CONAN_SKIP_CHECK_CREDENTIALS = "1"
             }
             steps {
               script {
                 withEnv(['CONAN_LOGIN_USERNAME=$JFROG_USR', 'CONAN_PASSWORD=$JFROG_PSW']) {
                   sh 'sudo pip install bincrafters-package-tools'
-                  sh 'conan user'
-                  sh("conan remove -f ${reference}")
+                  sh "conan remove -f ${reference}"
+                  sh "conan remote add upload_repo $CONAN_UPLOAD"
+                  sh "conan user $JFROG_USR -p $JFROG_PSW -r upload_repo"
                   sh 'python build.py'
                   sh 'rm -r $CONAN_USER_HOME'
                 }
@@ -133,13 +139,15 @@ def call(String reference) {
               CONAN_GCC_VERSIONS = "6"
               CONAN_USER_HOME = "$WORKSPACE/conan"
               CONAN_ARCHS = "x86_64"
+              CONAN_SKIP_CHECK_CREDENTIALS = "1"
             }
             steps {
               script {
                 withEnv(['CONAN_LOGIN_USERNAME=$JFROG_USR', 'CONAN_PASSWORD=$JFROG_PSW']) {
                   sh 'sudo pip install bincrafters-package-tools'
-                  sh 'conan user'
-                  sh("conan remove -f ${reference}")
+                  sh "conan remove -f ${reference}"
+                  sh "conan remote add upload_repo $CONAN_UPLOAD"
+                  sh "conan user $JFROG_USR -p $JFROG_PSW -r upload_repo"
                   sh 'python build.py'
                   sh 'rm -r $CONAN_USER_HOME'
                 }
@@ -167,13 +175,15 @@ def call(String reference) {
               CONAN_GCC_VERSIONS = "7"
               CONAN_USER_HOME = "$WORKSPACE/conan"
               CONAN_ARCHS = "x86_64"
+              CONAN_SKIP_CHECK_CREDENTIALS = "1"
             }
             steps {
               script {
                 withEnv(['CONAN_LOGIN_USERNAME=$JFROG_USR', 'CONAN_PASSWORD=$JFROG_PSW']) {
                   sh 'sudo pip install bincrafters-package-tools'
-                  sh 'conan user'
-                  sh("conan remove -f ${reference}")
+                  sh "conan remove -f ${reference}"
+                  sh "conan remote add upload_repo $CONAN_UPLOAD"
+                  sh "conan user $JFROG_USR -p $JFROG_PSW -r upload_repo"
                   sh 'python build.py'
                   sh 'rm -r $CONAN_USER_HOME'
                 }
@@ -194,11 +204,14 @@ def call(String reference) {
               CONAN_VISUAL_VERSIONS = "15"
               CONAN_USER_HOME = "$WORKSPACE\\conan"
               CONAN_ARCHS = "x86_64"
+              CONAN_SKIP_CHECK_CREDENTIALS = "1"
             }
             steps {
               script {
                 withEnv(['CONAN_LOGIN_USERNAME=%JFROG_USR%', 'CONAN_PASSWORD=%JFROG_PSW%']) {
-                  bat("conan remove -f ${reference}")
+                  sh "conan remove -f ${reference}"
+                  sh "conan remote add upload_repo $CONAN_UPLOAD"
+                  sh "conan user $JFROG_USR -p $JFROG_PSW -r upload_repo"
                   bat 'python build.py'
                   bat 'rd /S /Q %CONAN_USER_HOME%'
                 }
@@ -218,11 +231,14 @@ def call(String reference) {
               CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_USER_HOME = "$WORKSPACE/conan"
               CONAN_APPLE_CLANG_VERSIONS = "9.1"
+              CONAN_SKIP_CHECK_CREDENTIALS = "1"
             }
             steps {
               script {
                 withEnv(['CONAN_LOGIN_USERNAME=$JFROG_USR', 'CONAN_PASSWORD=$JFROG_PSW']) {
                   sh "conan remove -f ${reference}"
+                  sh "conan remote add upload_repo $CONAN_UPLOAD"
+                  sh "conan user $JFROG_USR -p $JFROG_PSW -r upload_repo"
                   sh 'python3 build.py'
                   sh 'rm -rf %CONAN_USER_HOME%'
                 }
