@@ -216,7 +216,7 @@ def call(String reference) {
               script {
                 withEnv(['CONAN_LOGIN_USERNAME=$JFROG_USR', 'CONAN_PASSWORD=$JFROG_PSW']) {
                   sh "conan remove -f ${reference}"
-                  sh 'python2 build.py'
+                  sh 'python3 build.py'
                   sh 'rm -rf %CONAN_USER_HOME%'
                 }
               }
