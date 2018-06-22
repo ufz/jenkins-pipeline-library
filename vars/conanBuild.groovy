@@ -1,6 +1,7 @@
 // Usage: conanBuild { reference: "Qt/5.9.2" }
 
-def call(String reference) {
+def call(String reference,
+  Boolean clang = true, Boolean gcc = true, Boolean win = true, Boolean mac = true) {
 
   pipeline {
     agent none
@@ -13,6 +14,10 @@ def call(String reference) {
         parallel {
           // ************************** glang39 ********************************
           stage('clang39') {
+            when {
+              beforeAgent true
+              expression { return clang }
+            }
             agent {
               docker {
                 image 'ogs6/conan_clang39'
@@ -41,6 +46,10 @@ def call(String reference) {
           }
           // *************************** gcc49 ************************************
           stage('gcc49') {
+            when {
+              beforeAgent true
+              expression { return gcc }
+            }
             agent {
               docker {
                 image 'ogs6/conan_gcc49'
@@ -70,6 +79,10 @@ def call(String reference) {
           }
           // *************************** gcc5 ************************************
           stage('gcc5') {
+            when {
+              beforeAgent true
+              expression { return gcc }
+            }
             agent {
               docker {
                 image 'ogs6/conan_gcc5'
@@ -99,6 +112,10 @@ def call(String reference) {
           }
           // *************************** gcc6 ************************************
           stage('gcc6') {
+            when {
+              beforeAgent true
+              expression { return gcc }
+            }
             agent {
               docker {
                 image 'ogs6/conan_gcc6'
@@ -128,6 +145,10 @@ def call(String reference) {
           }
           // *************************** gcc7 ************************************
           stage('gcc7') {
+            when {
+              beforeAgent true
+              expression { return gcc }
+            }
             agent {
               docker {
                 image 'ogs6/conan_gcc7'
@@ -157,6 +178,10 @@ def call(String reference) {
           }
           // ************************** vs2017 ***********************************
           stage('vs2017') {
+            when {
+              beforeAgent true
+              expression { return win }
+            }
             agent {label 'win && conan' }
             environment {
               CONAN_REFERENCE = "${reference}"
@@ -169,20 +194,21 @@ def call(String reference) {
               CONAN_ARCHS = "x86_64"
             }
             steps {
-              script {
-                withEnv(['CONAN_LOGIN_USERNAME=%JFROG_USR%', 'CONAN_PASSWORD=%JFROG_PSW%']) {
-                  bat 'rd /S /Q %CONAN_USER_HOME% 2>NUL'
-                  sh "conan remove -f ${reference}"
-                  sh "conan remote add upload_repo $CONAN_UPLOAD"
-                  sh "conan user $JFROG_USR -p $JFROG_PSW -r upload_repo"
-                  bat 'python build.py'
-                  bat 'rd /S /Q %CONAN_USER_HOME% 2>NUL'
-                }
-              }
+                  bat "conan user"
+                  bat """
+                  set CONAN_LOGIN_USERNAME=%JFROG_USR%
+                  set CONAN_PASSWORD=%JFROG_PSW%
+                  python build.py"""
+                  bat 'rd /S /Q %CONAN_USER_HOME%'
+
             }
           }
           // ************************** macos ***********************************
           stage('macos') {
+            when {
+              beforeAgent true
+              expression { return mac }
+            }
             agent { label 'mac && conan' }
             environment {
               CONAN_REFERENCE = "${reference}"
