@@ -171,12 +171,12 @@ def call(String reference) {
             steps {
               script {
                 withEnv(['CONAN_LOGIN_USERNAME=%JFROG_USR%', 'CONAN_PASSWORD=%JFROG_PSW%']) {
-                  bat 'rd /S /Q %CONAN_USER_HOME%'
+                  bat 'rd /S /Q %CONAN_USER_HOME% 2>NUL'
                   sh "conan remove -f ${reference}"
                   sh "conan remote add upload_repo $CONAN_UPLOAD"
                   sh "conan user $JFROG_USR -p $JFROG_PSW -r upload_repo"
                   bat 'python build.py'
-                  bat 'rd /S /Q %CONAN_USER_HOME%'
+                  bat 'rd /S /Q %CONAN_USER_HOME% 2>NUL'
                 }
               }
             }
