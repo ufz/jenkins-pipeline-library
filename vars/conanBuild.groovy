@@ -22,6 +22,7 @@ def call(String reference,
               docker {
                 image 'ogs6/conan_clang39'
                 label 'docker'
+                args '--security-opt seccomp:unconfined'
                 alwaysPull true
               }
             }
@@ -126,7 +127,7 @@ def call(String reference,
               docker {
                 image 'ogs6/conan_gcc6'
                 label 'docker'
-                args '-v /home/jenkins/.ccache:/usr/src/.ccache'
+                args '-v /home/jenkins/.ccache:/usr/src/.ccache --security-opt seccomp:unconfined'
                 alwaysPull true
               }
             }
@@ -161,7 +162,7 @@ def call(String reference,
               docker {
                 image 'ogs6/conan_gcc7'
                 label 'docker'
-                args '-v /home/jenkins/.ccache:/usr/src/.ccache'
+                args '-v /home/jenkins/.ccache:/usr/src/.ccache --security-opt seccomp:unconfined'
                 alwaysPull true
               }
             }
