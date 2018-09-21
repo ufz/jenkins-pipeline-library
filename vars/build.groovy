@@ -22,9 +22,11 @@ def call(body) {
     map['cmd'] = "${map.cmd} -- ${map.cmd_args}"
 
   def script = ""
+  def tee_cmd = "tee"
 
   if (!isUnix) {
     // Win-specific
+    tee_cmd = "\"C:\\Program Files\\Git\\usr\\bin\\tee\""
     vcvarsllDir = "%vs${env.MSVC_NUMBER}0comntools%..\\..\\VC"
     if ((env.MSVC_NUMBER as Integer) >= 15)
       vcvarsllDir = "C:\\Program Files (x86)\\Microsoft Visual Studio\\${env.MSVC_VERSION}\\Community\\VC\\Auxiliary\\Build"
@@ -38,7 +40,11 @@ def call(body) {
 
   if (map.env != null)
     script += ". ${map.source_dir}/scripts/env/${map.env}\n"
-  script += "cd ${map.dir} && ${map.cmd}\n"
+  script += "cd ${map.dir}\n"
+  script += "${map.cmd}"
+  if (map.log != null)
+    script += " 2>&1 | ${tee_cmd} ${map.log}"
+  script += "\n"
 
   if (isUnix)
     sh "${script}"
