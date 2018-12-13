@@ -24,7 +24,13 @@ def call(body) {
   def script = ""
   def tee_cmd = "tee"
 
-  if (!isUnix) {
+  if (isUnix) {
+    // Fail early and with pipes | too
+    // https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+    // Does not work in /bin/sh
+    script += 'case $BASH in *bash* ) set -eo pipefail ;;esac\n'
+  }
+  else {
     // Win-specific
     tee_cmd = "\"C:\\Program Files\\Git\\usr\\bin\\tee\""
     vcvarsllDir = "%vs${env.MSVC_NUMBER}0comntools%..\\..\\VC"
