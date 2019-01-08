@@ -18,6 +18,13 @@ def call(body) {
     map['target'] = 'package'
   if (!map.containsKey('cmd'))
     map['cmd'] = "cmake --build . --config ${map.config} --target ${map.target}"
+
+  if (map.containsKey('threads'))
+    map['cmd'] = "${map.cmd} -j ${map.threads}"
+  else if (env.NUM_THREADS)
+    map['cmd'] = "${map.cmd} -j ${env.NUM_THREADS}"
+
+
   if (map.containsKey('cmd_args'))
     map['cmd'] = "${map.cmd} -- ${map.cmd_args}"
 
