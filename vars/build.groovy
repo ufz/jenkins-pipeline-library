@@ -52,7 +52,7 @@ def call(body) {
   }
 
   if (map.env != null)
-    script += ". ${map.source_dir}/scripts/env/${map.env}\n"
+    script += "set +x\n. ${map.source_dir}/scripts/env/${map.env}\nset -x\n"
   script += "cd ${map.dir}\n"
   script += "${map.cmd}"
   if (map.log != null)
