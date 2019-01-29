@@ -39,7 +39,7 @@ def call(body) {
   }
 
   if (map.env != null)
-    script += "set +x\n. ${map.source_dir}/scripts/env/${map.env}\nset -x\n"
+    script += "set +x\n. ${map.sourceDir}/scripts/env/${map.env}\nset -x\n"
   if (map.keepDir == false) {
     if (isUnix)
       script += "rm -rf ${map.dir} && mkdir ${map.dir}\n"
