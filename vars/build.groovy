@@ -37,7 +37,8 @@ def call(body) {
     // Fail early and with pipes | too
     // https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
     // Does not work in /bin/sh
-    script += 'case $BASH in *bash* ) set -eo pipefail ;;esac\n'
+    script += '#!/bin/bash\n'
+    script += 'set -eo pipefail\n'
   }
   else {
     // Win-specific
