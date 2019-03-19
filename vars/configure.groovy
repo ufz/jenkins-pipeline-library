@@ -24,9 +24,11 @@ def call(body) {
     map['cmakeOptions'] = ''
 
   def script = ""
+  def tee_cmd = "tee"
 
   if (!isUnix) {
     // Win-specific
+    tee_cmd = "\"C:\\Program Files\\Git\\usr\\bin\\tee\""
     vcvarsllDir = "%vs${env.MSVC_NUMBER}0comntools%..\\..\\VC"
     if ((env.MSVC_NUMBER as Integer) >= 15)
       vcvarsllDir = "C:\\Program Files (x86)\\Microsoft Visual Studio\\${env.MSVC_VERSION}\\Community\\VC\\Auxiliary\\Build"
@@ -47,7 +49,10 @@ def call(body) {
       script += "rd /S /Q ${map.dir} 2>nul & mkdir ${map.dir}\n"
   }
 
-  script += "(cd ${map.dir} && cmake ../${map.sourceDir} -G \"${map.generator}\" -DCMAKE_BUILD_TYPE=${map.config} ${map.cmakeOptions})\n"
+  script += "(cd ${map.dir} && cmake ../${map.sourceDir} -G \"${map.generator}\" -DCMAKE_BUILD_TYPE=${map.config} ${map.cmakeOptions})"
+  if (map.log != null)
+    script += " 2>&1 | ${tee_cmd} ${map.log}"
+  script += "\n"
 
   if (isUnix)
     sh "${script}"
