@@ -25,7 +25,7 @@ def call(String reference,
             }
             agent {
               docker {
-                image 'conanio/clang7'
+                image 'ogs6/conan_clang7'
                 label 'docker'
                 args '--security-opt seccomp:unconfined'
                 alwaysPull true
@@ -37,7 +37,7 @@ def call(String reference,
               CONAN_USERNAME = "bilke"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
               CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
-              CONAN_CLANG_VERSIONS = "7"
+              CONAN_CLANG_VERSIONS = "7.0"
               CONAN_USER_HOME = "$WORKSPACE/conan"
               CONAN_ARCHS = "x86_64"
               CONAN_UPLOAD_RETRY = "5"
@@ -57,7 +57,7 @@ def call(String reference,
             }
             agent {
               docker {
-                image 'conanio/gcc7'
+                image 'ogs6/conan_gcc7'
                 label 'docker'
                 alwaysPull true
               }
@@ -88,7 +88,7 @@ def call(String reference,
             }
             agent {
               docker {
-                image 'conanio/gcc8'
+                image 'ogs6/conan_gcc8'
                 label 'docker'
                 alwaysPull true
               }
@@ -119,7 +119,7 @@ def call(String reference,
             }
             agent {
               docker {
-                image 'conanio/gcc9'
+                image 'ogs6/conan_gcc9'
                 label 'docker'
                 args '-v /home/jenkins/.ccache:/usr/src/.ccache --security-opt seccomp:unconfined'
                 alwaysPull true
@@ -131,7 +131,7 @@ def call(String reference,
               CONAN_USERNAME = "bilke"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
               CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
-              CONAN_GCC_VERSIONS = "6"
+              CONAN_GCC_VERSIONS = "9"
               CONAN_USER_HOME = "$WORKSPACE/conan"
               CONAN_ARCHS = "x86_64"
               CONAN_UPLOAD_RETRY = "5"
@@ -186,7 +186,7 @@ def call(String reference,
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
               CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_USER_HOME = "$WORKSPACE/conan"
-              CONAN_APPLE_CLANG_VERSIONS = "9.1"
+              CONAN_APPLE_CLANG_VERSIONS = "10.0"
               CONAN_UPLOAD_RETRY = "5"
               CONAN_BUILD_POLICY = "outdated"
             }
