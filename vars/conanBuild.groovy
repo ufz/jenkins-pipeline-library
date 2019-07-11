@@ -36,6 +36,7 @@ def call(String reference,
               JFROG = credentials('3a3e2a63-4509-43c9-a2e9-ea0c50fdcd4c')
               CONAN_USERNAME = "bilke"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
+              CONAN_REMOTES = "https://api.bintray.com/conan/bincrafters/public-conan"
               CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_CLANG_VERSIONS = "7.0"
               CONAN_USER_HOME = "$WORKSPACE/conan"
@@ -67,6 +68,7 @@ def call(String reference,
               JFROG = credentials('3a3e2a63-4509-43c9-a2e9-ea0c50fdcd4c')
               CONAN_USERNAME = "bilke"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
+              CONAN_REMOTES = "https://api.bintray.com/conan/bincrafters/public-conan"
               CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_GCC_VERSIONS = "7"
               CONAN_USER_HOME = "$WORKSPACE/conan"
@@ -98,6 +100,7 @@ def call(String reference,
               JFROG = credentials('3a3e2a63-4509-43c9-a2e9-ea0c50fdcd4c')
               CONAN_USERNAME = "bilke"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
+              CONAN_REMOTES = "https://api.bintray.com/conan/bincrafters/public-conan"
               CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_GCC_VERSIONS = "8"
               CONAN_USER_HOME = "$WORKSPACE/conan"
@@ -130,6 +133,7 @@ def call(String reference,
               JFROG = credentials('3a3e2a63-4509-43c9-a2e9-ea0c50fdcd4c')
               CONAN_USERNAME = "bilke"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
+              CONAN_REMOTES = "https://api.bintray.com/conan/bincrafters/public-conan"
               CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_GCC_VERSIONS = "9"
               CONAN_USER_HOME = "$WORKSPACE/conan"
@@ -155,6 +159,7 @@ def call(String reference,
               JFROG = credentials('3a3e2a63-4509-43c9-a2e9-ea0c50fdcd4c')
               CONAN_USERNAME = "bilke"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
+              CONAN_REMOTES = "https://api.bintray.com/conan/bincrafters/public-conan"
               CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_VISUAL_VERSIONS = "15"
               CONAN_USER_HOME = "$WORKSPACE\\conan"
@@ -184,6 +189,7 @@ def call(String reference,
               JFROG = credentials('3a3e2a63-4509-43c9-a2e9-ea0c50fdcd4c')
               CONAN_USERNAME = "bilke"
               CONAN_UPLOAD = "https://ogs.jfrog.io/ogs/api/conan/conan"
+              CONAN_REMOTES = "https://api.bintray.com/conan/bincrafters/public-conan"
               CONAN_STABLE_BRANCH_PATTERN = "release/*|stable/*"
               CONAN_USER_HOME = "$WORKSPACE/conan"
               CONAN_APPLE_CLANG_VERSIONS = "10.0"
