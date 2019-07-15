@@ -7,6 +7,7 @@ def call(String reference,
     options {
       ansiColor('xterm')
       timestamps()
+      checkoutToSubdirectory('src')
     }
     parameters {
       booleanParam(name: 'clang', defaultValue: clang)
@@ -17,7 +18,7 @@ def call(String reference,
     stages {
       stage('Build') {
         parallel {
-          // ************************** glang7 *********************************
+          // ************************** clang7 *********************************
           stage('clang7') {
             when {
               beforeAgent true
@@ -46,9 +47,11 @@ def call(String reference,
               CONAN_BUILD_POLICY = "outdated"
             }
             steps {
-              sh "rm -rf $WORKSPACE/conan"
-              sh "CONAN_LOGIN_USERNAME=$JFROG_USR CONAN_PASSWORD=$JFROG_PSW python build.py"
-              sh "rm -rf $WORKSPACE/conan"
+              dir('src') {
+                sh "rm -rf $WORKSPACE/conan"
+                sh "CONAN_LOGIN_USERNAME=$JFROG_USR CONAN_PASSWORD=$JFROG_PSW python build.py"
+                sh "rm -rf $WORKSPACE/conan"
+              }
             }
           }
           // *************************** gcc7 ************************************
@@ -79,9 +82,11 @@ def call(String reference,
               CONAN_BUILD_POLICY = "outdated"
             }
             steps {
-              sh "rm -rf $WORKSPACE/conan"
-              sh "CONAN_LOGIN_USERNAME=$JFROG_USR CONAN_PASSWORD=$JFROG_PSW python build.py"
-              sh "rm -rf $WORKSPACE/conan"
+              dir('src') {
+                sh "rm -rf $WORKSPACE/conan"
+                sh "CONAN_LOGIN_USERNAME=$JFROG_USR CONAN_PASSWORD=$JFROG_PSW python build.py"
+                sh "rm -rf $WORKSPACE/conan"
+              }
             }
           }
           // *************************** gcc8 ************************************
@@ -112,9 +117,11 @@ def call(String reference,
               CONAN_BUILD_POLICY = "outdated"
             }
             steps {
-              sh "rm -rf $WORKSPACE/conan"
-              sh "CONAN_LOGIN_USERNAME=$JFROG_USR CONAN_PASSWORD=$JFROG_PSW python build.py"
-              sh "rm -rf $WORKSPACE/conan"
+              dir('src') {
+                sh "rm -rf $WORKSPACE/conan"
+                sh "CONAN_LOGIN_USERNAME=$JFROG_USR CONAN_PASSWORD=$JFROG_PSW python build.py"
+                sh "rm -rf $WORKSPACE/conan"
+              }
             }
           }
           // *************************** gcc9 ************************************
@@ -146,9 +153,11 @@ def call(String reference,
               CONAN_BUILD_POLICY = "outdated"
             }
             steps {
-              sh "rm -rf $WORKSPACE/conan"
-              sh "CONAN_LOGIN_USERNAME=$JFROG_USR CONAN_PASSWORD=$JFROG_PSW python build.py"
-              sh "rm -rf $WORKSPACE/conan"
+              dir('src') {
+                sh "rm -rf $WORKSPACE/conan"
+                sh "CONAN_LOGIN_USERNAME=$JFROG_USR CONAN_PASSWORD=$JFROG_PSW python build.py"
+                sh "rm -rf $WORKSPACE/conan"
+              }
             }
           }
           // ************************** vs2017 ***********************************
@@ -173,13 +182,14 @@ def call(String reference,
               CONAN_BUILD_POLICY = "outdated"
             }
             steps {
-                  bat "conan user"
-                  bat """
-                  set CONAN_LOGIN_USERNAME=%JFROG_USR%
-                  set CONAN_PASSWORD=%JFROG_PSW%
-                  python build.py"""
-                  bat 'rd /S /Q %CONAN_USER_HOME%'
-
+              dir('src') {
+                bat "conan user"
+                bat """
+                set CONAN_LOGIN_USERNAME=%JFROG_USR%
+                set CONAN_PASSWORD=%JFROG_PSW%
+                python build.py"""
+                bat 'rd /S /Q %CONAN_USER_HOME%'
+              }
             }
           }
           // ************************** macos ***********************************
@@ -203,10 +213,12 @@ def call(String reference,
               CONAN_BUILD_POLICY = "outdated"
             }
             steps {
-              sh "rm -rf $WORKSPACE/conan"
-              sh 'conan user'
-              sh "CONAN_LOGIN_USERNAME=$JFROG_USR CONAN_PASSWORD=$JFROG_PSW python3 build.py"
-              sh "rm -rf $WORKSPACE/conan"
+              dir('src') {
+                sh "rm -rf $WORKSPACE/conan"
+                sh 'conan user'
+                sh "CONAN_LOGIN_USERNAME=$JFROG_USR CONAN_PASSWORD=$JFROG_PSW python3 build.py"
+                sh "rm -rf $WORKSPACE/conan"
+              }
             }
           }
         } // end parallel
