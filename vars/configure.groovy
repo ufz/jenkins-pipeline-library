@@ -12,10 +12,18 @@ def call(body) {
     map['arch'] = 'x86_64'
   if (!map.containsKey('config'))
     map['config'] = 'Release'
-  if (!map.containsKey('dir'))
-    map['dir'] = 'build'
-  if (!map.containsKey('sourceDir'))
-    map['sourceDir'] = '.'
+  if (!map.containsKey('dir')) {
+    if (!env.BUILD_DIR)
+      map['dir'] = 'build'
+    else
+      map['dir'] = "${env.BUILD_DIR}"
+  }
+  if (!map.containsKey('sourceDir')) {
+    if (!env.SOURCE_DIR)
+      map['sourceDir'] = '../'
+    else
+      map['sourceDir'] = "${env.SOURCE_DIR}"
+  }
   if (!map.containsKey('keepDir'))
     map['keepDir'] = false
   if (!map.containsKey('generator'))
@@ -49,7 +57,7 @@ def call(body) {
       script += "rd /S /Q ${map.dir} 2>nul & mkdir ${map.dir}\n"
   }
 
-  script += "(cd ${map.dir} && cmake ../${map.sourceDir} -G \"${map.generator}\" -DCMAKE_BUILD_TYPE=${map.config} ${map.cmakeOptions})"
+  script += "(cd ${map.dir} && cmake ${map.sourceDir} -G \"${map.generator}\" -DCMAKE_BUILD_TYPE=${map.config} ${map.cmakeOptions})"
   if (map.log != null)
     script += " 2>&1 | ${tee_cmd} ${map.log}"
   script += "\n"

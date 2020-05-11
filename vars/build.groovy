@@ -8,10 +8,18 @@ def call(body) {
   def isUnix = isUnix()
 
   // defaults
-  if (!map.containsKey('dir'))
-    map['dir'] = 'build'
-  if (!map.containsKey('source_dir'))
-    map['source_dir'] = '.'
+  if (!map.containsKey('dir')) {
+    if (!env.'BUILD_DIR')
+      map['dir'] = 'build'
+    else
+      map['dir'] = "${env.BUILD_DIR}"
+  }
+  if (!map.containsKey('sourceDir')) {
+    if (!env.SOURCE_DIR)
+      map['sourceDir'] = '.'
+    else
+      map['sourceDir'] = "${env.SOURCE_DIR}"
+  }
   if (!map.containsKey('config'))
     map['config'] = 'Release'
   if (!map.containsKey('target'))
@@ -55,7 +63,7 @@ def call(body) {
   }
 
   if (map.env != null)
-    script += "set +x\n. ${map.source_dir}/scripts/env/${map.env}\nset -x\n"
+    script += "set +x\n. ${map.sourceDir}/scripts/env/${map.env}\nset -x\n"
   script += "cd ${map.dir}\n"
   script += "${map.cmd}"
   if (map.log != null)
